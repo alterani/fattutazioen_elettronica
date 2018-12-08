@@ -1,0 +1,10 @@
+{
+  "ws_server_param": {
+    "username": "<CHANGE>",
+    "password": "<CHANGE>"
+  },
+  "odoo_server_param": {
+    "username": "<CHANGE>",
+    "password": "<CHANGE>"
+  }
+}

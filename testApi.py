@@ -12,6 +12,9 @@ elettronica ARUBA:
 
 import requests
 import json
+import base64
+
+
 
 #LETTURA CREDENZIALI SERVER DA FILE JSON
 
@@ -24,7 +27,6 @@ pwd = credenziali['ws_server_param']['password']
 
 
 # LOGIN
-
 url = "https://auth.fatturazioneelettronica.aruba.it/auth/signin"
 
 payload = "grant_type=password&username="+utente+"&password=" + pwd
@@ -90,6 +92,7 @@ headers = {
 
     }
 
+
 response = requests.request("GET", url,  headers=headers, params=querystring, verify=False)
 
 datiRispsta = json.loads(response.text)
@@ -103,7 +106,48 @@ else:
 
 
 
+# INVIA FATTURA
+url = "https://ws.fatturazioneelettronica.aruba.it/services/invoice/upload"
 
+with open ("prova-invio.xml", "r") as myfile:
+    #str_data=''.join(myfile.readlines())
+    str_data = myfile.read()
+
+base64_data = base64.b64encode(bytes(str_data, 'utf-8'))
+
+dict_data = {}
+dict_data['dataFile'] = str(base64_data)[2:-1]
+dict_data['credential'] = ''
+dict_data['domain'] = ''
+
+json_data = json.dumps(dict_data)
+
+
+#payload = "{\n  \"dataFile\" : \"" + json_data + "\",\n  \"credential\" : \"\",\n  \"domain\" : \"\"\n}"
+payload = json_data
+
+headers = {
+    'accept': "application/json",
+    'authorization': "Bearer " + access_token,
+    'content-type': "application/json",
+    'content-length': "90",
+    'cache-control': "no-cache"
+
+    }
+
+response = requests.request("POST", url, data=payload, headers=headers,  verify=False)
+
+datiRispsta = json.loads(response.text)
+if (int(response.status_code) == 200):
+    print("FATTURA INVIATA CON SUCCESSO:")
+    print(datiRispsta)
+else:
+    print("ERRORE: \n")
+    print(datiRispsta)
+
+
+    
+    
 
 
 

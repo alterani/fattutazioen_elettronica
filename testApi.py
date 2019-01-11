@@ -109,7 +109,7 @@ else:
 # INVIA FATTURA
 url = "https://ws.fatturazioneelettronica.aruba.it/services/invoice/upload"
 
-with open ("prova-invio.xml", "r") as myfile:
+with open ("IT08956340965_00005.xml", "r") as myfile:
     #str_data=''.join(myfile.readlines())
     str_data = myfile.read()
 
